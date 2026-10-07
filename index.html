@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<style>
+html,body{margin:0;padding:0}
+body{width:3840px;height:2160px;overflow:hidden;background:#f4f7fb;font-family:'Barlow','DejaVu Sans',sans-serif;color:#12305a}
+svg text{font-family:'Barlow','DejaVu Sans',sans-serif}
+.hdr{position:absolute;left:0;top:0;width:3840px;height:170px;background:linear-gradient(90deg,#0b2f6b,#124c9c 60%,#1b8a4c);color:#fff}
+.hdr h1{margin:0;position:absolute;left:70px;top:22px;font-size:76px;font-weight:800;letter-spacing:1px}
+.hdr .sub{position:absolute;left:74px;top:112px;font-size:38px;font-weight:500;opacity:.92}
+.hdr .tag{position:absolute;right:70px;top:40px;font-size:40px;font-weight:700;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.5);border-radius:18px;padding:16px 30px}
+.panel{position:absolute;top:1700px;height:400px;background:#fff;border-radius:26px;box-shadow:0 6px 24px rgba(10,40,90,.12);padding:26px 34px;box-sizing:border-box}
+.panel h3{margin:0 0 14px;font-size:40px;font-weight:800;color:#0b2f6b}
+.panel p,.panel li{font-size:31px;line-height:1.36;margin:0}
+.panel ul{margin:0;padding-left:30px}
+.panel ol{margin:0;padding-left:40px}
+.b{font-weight:700}
+html{background:#dfe6ef;overflow:hidden}
+body{transform-origin:0 0;position:relative}
+.flow{animation:flow 1.1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-36}}
+.flame{animation:flame .6s ease-in-out infinite alternate}
+@keyframes flame{from{fill:#ffd34d}to{fill:#ff9d2e}}
+.paused .flow,.paused .flame{animation-play-state:paused}
+.btn{position:absolute;right:900px;top:40px;font-size:36px;font-weight:700;color:#fff;background:#1b8a4c;border:2px solid rgba(255,255,255,.6);border-radius:18px;padding:16px 30px;cursor:pointer;font-family:inherit}
+.mw{font-weight:800}
+.foot{position:absolute;left:70px;top:2112px;font-size:26px;color:#5a6b85}
+</style></head><body>
+<div class="hdr">
+  <h1>NMNĐ Ô MÔN IV — SƠ ĐỒ NGUYÊN LÝ CHU TRÌNH HỖN HỢP (CCGT)</h1>
+  <div class="sub">Chế độ 2+2+1: 2 tuabin khí + 2 lò thu hồi nhiệt + 1 tuabin hơi · Tổng công suất thô 1.155 MW (388,9 + 388,9 + 377,2) · Pmin 435,4 MW · Trạm 500 kV Ô Môn</div>
+  <button class="btn" id="tg" onclick="document.body.classList.toggle('paused');this.textContent=document.body.classList.contains('paused')?'Chạy dòng':'Tạm dừng'">Tạm dừng</button><div class="tag">Sơ đồ nguyên lý · không theo tỷ lệ</div>
+</div>
+
+<svg width="3840" height="2160" viewBox="0 0 3840 2160" style="position:absolute;left:0;top:0">
+<defs>
+  <marker id="aBlue" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#3aa0e8"/></marker>
+  <marker id="aOr" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#e07b1a"/></marker>
+  <marker id="aRed" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#d1262b"/></marker>
+  <marker id="aW" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#1f5fbf"/></marker>
+  <marker id="aG" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#1b9a4c"/></marker>
+  <marker id="aF" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#c9a000"/></marker>
+  <marker id="aC" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#17a2b8"/></marker>
+  <linearGradient id="gComp" x1="0" x2="1"><stop offset="0" stop-color="#9cc9f0"/><stop offset="1" stop-color="#4f8fd0"/></linearGradient>
+  <linearGradient id="gTurb" x1="0" x2="1"><stop offset="0" stop-color="#f6a04d"/><stop offset="1" stop-color="#e2672a"/></linearGradient>
+  <linearGradient id="gHrsg" x1="0" x2="1"><stop offset="0" stop-color="#f8c9a6"/><stop offset="1" stop-color="#dfe9f4"/></linearGradient>
+  <linearGradient id="gST" x1="0" x2="1"><stop offset="0" stop-color="#ef7b7e"/><stop offset="1" stop-color="#b9375b"/></linearGradient>
+  <linearGradient id="gGen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd08a"/><stop offset="1" stop-color="#1b8a4c"/></linearGradient>
+  <filter id="sh" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0a2a5a" flood-opacity=".18"/></filter>
+</defs>
+<g id="trains"></g>
+<g id="common"></g>
+</svg>
+
+<div class="panel" style="left:60px;width:1180px">
+  <h3>Cấu hình nhà máy</h3>
+  <ul>
+    <li><span class="b">Chế độ 2+2+1 nhiều trục:</span> mỗi tuabin khí có máy phát riêng; 2 HRSG cấp hơi chung cho 1 tuabin hơi → 3 máy phát, tổng 1.155 MW thô.</li>
+    <li><span class="b">Tuabin khí:</span> 2 × Mitsubishi Power M701JAC, máy phát IC7H1W, 388,9 MW/tổ.</li>
+    <li><span class="b">Tuabin hơi:</span> Siemens Energy SST-5000, máy phát STG-3000W, 377,2 MW · <span class="b">HRSG:</span> 2 lò BHI.</li>
+    <li><span class="b">Nhiên liệu:</span> khí Lô B&amp;48/95 và Lô 52/97; dự phòng dầu DO.</li>
+    <li><span class="b">Tổng thầu EPC:</span> Liên danh Doosan Enerbility – PECC2 (HĐ 06/6/2025).</li>
+  </ul>
+</div>
+<div class="panel" style="left:1280px;width:1360px">
+  <h3>Nguyên lý làm việc (theo số trên sơ đồ)</h3>
+  <ol>
+    <li>Không khí qua lọc, được máy nén nén lên áp suất cao.</li>
+    <li>Khí đốt phun vào buồng đốt, cháy cùng khí nén → dòng khí rất nóng.</li>
+    <li>Khí nóng giãn nở làm quay tuabin khí → kéo máy phát GT (2 × 388,9 MW).</li>
+    <li>Khói thải còn rất nóng (~600 °C) vào HRSG, đun nước thành hơi.</li>
+    <li>Hơi của 2 HRSG gộp lại, làm quay tuabin hơi → máy phát ST (377,2 MW).</li>
+    <li>Hơi thoát ngưng tụ ở bình ngưng (nước làm mát), bơm trở lại HRSG.</li>
+    <li>Điện của 3 máy phát qua MBA tăng áp lên trạm 500 kV Ô Môn.</li>
+  </ol>
+</div>
+<div class="panel" style="left:2680px;width:1100px">
+  <h3>Phạm vi LTMA (MPW chào)</h3>
+  <ul>
+    <li><span class="b">Chỉ 2 tuabin khí:</span> từ đường gió vào đến đường khói thoát GT (khung cam nét đứt).</li>
+    <li><span class="b">Không gồm:</span> máy phát, HRSG, tuabin hơi, BOP, nhân công.</li>
+    <li>8 kỳ: 4 CI, 2 TI, 2 MI; 100.000 EFH / 3.000 ES / tối đa 15 năm.</li>
+  </ul>
+  <div id="legend" style="margin-top:16px;font-size:27px;line-height:1.5"></div>
+</div>
+<div class="foot">Nguồn: Phụ lục 1 &amp; 3 dự thảo PPA NMĐ Ô Môn IV (công suất thô tại điều kiện thiết kế, nhà sản xuất, model), BC 1416/BC-CNPĐ (24/7/2026), HĐ EPC. Cấp áp trong HRSG/tuabin hơi, nhiệt độ khói và bố trí MBA là minh họa điển hình, cần đối chiếu P&amp;ID/sơ đồ một sợi. Luna dựng 07/10/2026.</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!==undefined)e.textContent=text;parent.appendChild(e);return e;}
+function txt(p,x,y,s,size=34,w=600,fill="#12305a",anchor="middle"){return el("text",{x,y,"font-size":size,"font-weight":w,fill,"text-anchor":anchor,"dominant-baseline":"middle"},p,s);}
+function line(p,pts,color,width,marker,dash){const a={points:pts.map(q=>q.join(",")).join(" "),fill:"none",stroke:color,"stroke-width":width,"stroke-linejoin":"round","stroke-linecap":"round"};if(marker)a["marker-end"]=`url(#${marker})`;if(dash)a["stroke-dasharray"]=dash;const base=el("polyline",a,p);if(!dash&&width>=8){el("polyline",{points:a.points,fill:"none",stroke:"rgba(255,255,255,.8)","stroke-width":Math.max(4,width*0.42),"stroke-linecap":"round","stroke-dasharray":"2 34",class:"flow"},p);}return base;}
+function badge(p,x,y,n){el("circle",{cx:x,cy:y,r:30,fill:"#0b2f6b",stroke:"#fff","stroke-width":5,filter:"url(#sh)"},p);txt(p,x,y+2,n,36,800,"#fff");}
+function xfmr(p,x,y,lbl,lblDy=0,anchor="middle",lx=null){el("circle",{cx:x,cy:y-24,r:30,fill:"#fff",stroke:"#1b9a4c","stroke-width":7},p);el("circle",{cx:x,cy:y+24,r:30,fill:"#fff",stroke:"#1b9a4c","stroke-width":7},p);txt(p,lx??x,y+lblDy,lbl,26,700,"#1b6b3a",anchor);}
+
+const T=document.getElementById("trains"),C=document.getElementById("common");
+
+function train(Yc,n,top){
+  const g=el("g",{},T);
+  // LTMA scope
+  el("rect",{x:675,y:Yc-345,width:790,height:530,rx:30,fill:"rgba(240,140,30,.06)",stroke:"#e07b1a","stroke-width":6,"stroke-dasharray":"26 16"},g);
+  txt(g,1460,top?Yc-372:Yc+215,"Phạm vi LTMA",32,800,"#c4600c","end");
+  // generator
+  el("rect",{x:310,y:Yc-120,width:290,height:240,rx:40,fill:"url(#gGen)",filter:"url(#sh)"},g);
+  txt(g,455,Yc-72,"Máy phát GT"+n,34,800,"#fff");txt(g,455,Yc-28,"Mitsubishi Power",25,600,"#eafff1");txt(g,455,Yc+6,"IC7H1W",25,600,"#eafff1");
+  const m=txt(g,455,Yc+60,"0,0 MW",40,800,"#fff");m.setAttribute("data-mw","388.9");
+  el("rect",{x:600,y:Yc-14,width:100,height:28,fill:"#5d6b7e"},g);
+  // compressor
+  el("polygon",{points:`700,${Yc-150} 1000,${Yc-80} 1000,${Yc+80} 700,${Yc+150}`,fill:"url(#gComp)",stroke:"#2a6aa8","stroke-width":4,filter:"url(#sh)"},g);
+  txt(g,850,Yc,"Máy nén",36,800,"#0b2f6b");
+  // combustor
+  el("rect",{x:1000,y:Yc-80,width:130,height:160,fill:"#ffd34d",stroke:"#c9a000","stroke-width":4,class:"flame"},g);
+  txt(g,1065,Yc-18,"Buồng",28,800,"#6b4a00");txt(g,1065,Yc+16,"đốt",28,800,"#6b4a00");
+  // turbine
+  el("polygon",{points:`1130,${Yc-80} 1430,${Yc-160} 1430,${Yc+160} 1130,${Yc+80}`,fill:"url(#gTurb)",stroke:"#b5531a","stroke-width":4,filter:"url(#sh)"},g);
+  txt(g,1285,Yc-34,"Tuabin khí #"+n,32,800,"#fff");txt(g,1285,Yc+4,"M701JAC",28,700,"#fff3e6");txt(g,1285,Yc+40,"Mitsubishi Power",22,600,"#fff3e6");
+  // air filter
+  el("rect",{x:720,y:Yc-330,width:240,height:100,rx:14,fill:"#e3f1fc",stroke:"#3aa0e8","stroke-width":5},g);
+  txt(g,840,Yc-280,"Lọc gió vào",32,700,"#1a5d93");
+  line(g,[[840,Yc-226],[840,Yc-150]],"#3aa0e8",12,"aBlue");
+  txt(g,700,Yc-375,"Không khí",30,700,"#1a5d93","start");
+  line(g,[[700,Yc-400],[700,Yc-400]],"#3aa0e8",1);
+  badge(g,640,Yc-260,1);
+  // exhaust to HRSG
+  line(g,[[1432,Yc],[1530,Yc]],"#e07b1a",22,"aOr");
+  // HRSG
+  el("rect",{x:1550,y:Yc-200,width:600,height:400,rx:18,fill:"url(#gHrsg)",stroke:"#9b5a2a","stroke-width":5,filter:"url(#sh)"},g);
+  const bands=["QN/TN","CA","TA","HA","Hâm"];
+  bands.forEach((b,i)=>{const x=1585+i*112;el("rect",{x,y:Yc-150,width:70,height:300,rx:8,fill:"none",stroke:"#c0392b","stroke-width":4,"stroke-dasharray":"6 6"},g);txt(g,x+35,Yc+125,b,22,700,"#7a2a14");
+    for(let k=0;k<5;k++)el("line",{x1:x+10,y1:Yc-120+k*45,x2:x+60,y2:Yc-120+k*45,stroke:"#c0392b","stroke-width":3},g);});
+  txt(g,1850,top?Yc-245:Yc+245,"Lò thu hồi nhiệt HRSG #"+n+" (BHI)",34,800,"#7a3a10");
+  line(g,[[1600,Yc-175],[2100,Yc-175]],"#e07b1a",6,"aOr","4 10");
+  badge(g,1490,Yc-70,4);
+  // stack
+  const sTop=top?Yc-370:Yc-280;
+  el("rect",{x:2180,y:sTop,width:80,height:(Yc+200)-sTop,fill:"#8a96a8",stroke:"#5d6b7e","stroke-width":4},g);
+  el("rect",{x:2150,y:Yc+60,width:32,height:80,fill:"#c4ccd6"},g);
+  line(g,[[2220,sTop-6],[2220,sTop-70]],"#9aa5b5",12,null,"2 14");
+  txt(g,2280,top?sTop+24:Yc+170,"Ống khói",30,700,"#4a5668","start");
+  // fuel tap
+  return g;
+}
+const Y1=620,Y2=1360,YS=990;
+train(Y1,1,true);train(Y2,2,false);
+
+// fuel
+el("rect",{x:1000,y:880,width:400,height:150,rx:22,fill:"#fff6cc",stroke:"#c9a000","stroke-width":5,filter:"url(#sh)"},C);
+txt(C,1200,925,"Nhiên liệu",36,800,"#6b4a00");txt(C,1200,968,"Khí Lô B&48/95, Lô 52/97",26,600,"#6b4a00");txt(C,1200,1003,"Dự phòng: dầu DO",26,600,"#6b4a00");
+line(C,[[1065,878],[1065,Y1+90]],"#c9a000",12,"aF");
+line(C,[[1065,1032],[1065,Y2-90]],"#c9a000",12,"aF");
+badge(C,960,Y1+120,2);badge(C,1290,Y1-205,3);
+
+// feedwater
+line(C,[[2400,1195],[2400,1040],[2080,1040]],"#1f5fbf",12);
+line(C,[[2080,1040],[2080,Y1+210]],"#1f5fbf",12,"aW");
+line(C,[[2080,1040],[2080,Y2-210]],"#1f5fbf",12,"aW");
+// steam header (red) and feedwater (blue)
+line(C,[[1700,Y1+202],[1700,960],[2440,960]],"#d1262b",18,"aRed");
+line(C,[[1700,Y2-202],[1700,960]],"#d1262b",18);
+txt(C,1960,925,"Hơi từ 2 HRSG",30,800,"#a3151a");
+txt(C,2110,1075,"Nước cấp về HRSG",28,700,"#1f5fbf","start");
+
+// steam turbine
+el("polygon",{points:"2450,925 2620,905 2620,1075 2450,1055",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+el("polygon",{points:"2630,895 2780,880 2780,1100 2630,1085",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+el("polygon",{points:"2790,870 3000,830 3000,1150 2790,1110",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+txt(C,2535,990,"CA",30,800,"#fff");txt(C,2705,990,"TA",30,800,"#fff");txt(C,2895,990,"HA",30,800,"#fff");
+txt(C,2725,780,"Tuabin hơi SST-5000 · Siemens Energy",34,800,"#8a1f3d");
+el("rect",{x:3000,y:976,width:60,height:28,fill:"#5d6b7e"},C);
+el("rect",{x:3060,y:870,width:252,height:240,rx:40,fill:"url(#gGen)",filter:"url(#sh)"},C);
+txt(C,3186,915,"Máy phát ST",30,800,"#fff");txt(C,3186,955,"Siemens Energy",23,600,"#eafff1");txt(C,3186,988,"STG-3000W",23,600,"#eafff1");
+const mst=txt(C,3186,1048,"0,0 MW",38,800,"#fff");mst.setAttribute("data-mw","377.2");
+badge(C,2490,850,5);
+
+// condenser
+line(C,[[2895,1152],[2895,1190]],"#d1262b",14,"aRed");
+el("rect",{x:2700,y:1200,width:340,height:150,rx:24,fill:"#d9ecff",stroke:"#1f5fbf","stroke-width":5,filter:"url(#sh)"},C);
+txt(C,2870,1255,"Bình ngưng",34,800,"#0b3f8a");txt(C,2870,1300,"hơi → nước",26,600,"#0b3f8a");
+// cooling water
+line(C,[[3330,1250],[3060,1250]],"#17a2b8",12,"aC");
+line(C,[[3045,1310],[3330,1310]],"#17a2b8",12,"aC");
+txt(C,3200,1205,"Nước làm mát vào",26,700,"#0f7585");txt(C,3200,1362,"Nước làm mát ra",26,700,"#0f7585");
+// pump
+line(C,[[2698,1275],[2445,1275]],"#1f5fbf",12,"aW");
+el("circle",{cx:2400,cy:1240,r:44,fill:"#fff",stroke:"#1f5fbf","stroke-width":7},C);
+el("polygon",{points:"2380,1215 2380,1265 2425,1240",fill:"#1f5fbf"},C);
+txt(C,2400,1320,"Bơm",28,700,"#1f5fbf");
+badge(C,2620,1390,6);
+
+// substation
+el("rect",{x:3450,y:300,width:340,height:1340,rx:28,fill:"#eafaf0",stroke:"#1b9a4c","stroke-width":6,filter:"url(#sh)"},C);
+txt(C,3620,370,"TRẠM",40,800,"#13703a");txt(C,3620,420,"500 kV",44,800,"#13703a");txt(C,3620,470,"Ô MÔN",40,800,"#13703a");
+for(let i=0;i<9;i++){el("line",{x1:3500,y1:560+i*110,x2:3740,y2:560+i*110,stroke:"#1b9a4c","stroke-width":5},C);}
+const mt=txt(C,3620,1490,"0 MW",44,800,"#0b2f6b");mt.setAttribute("data-mw","1155");mt.setAttribute("data-int","1");txt(C,3620,1535,"tổng công suất thô",24,600,"#13703a");txt(C,3620,1575,"Lên lưới",34,800,"#13703a");txt(C,3620,1612,"điện quốc gia",28,600,"#13703a");
+line(C,[[3790,970],[3832,970]],"#1b9a4c",10);
+// GT1 power
+line(C,[[465,Y1-120],[465,Y1-170]],"#1b9a4c",10);
+xfmr(C,465,Y1-225,"MBA tăng áp",0,"end",410);
+line(C,[[465,Y1-280],[465,220],[3620,220],[3620,296]],"#1b9a4c",10,"aG");
+// GT2 power
+line(C,[[465,Y2+120],[465,Y2+150]],"#1b9a4c",10);
+xfmr(C,465,Y2+205,"MBA tăng áp",0,"end",410);
+line(C,[[465,Y2+260],[465,1660],[3620,1660],[3620,1644]],"#1b9a4c",10,"aG");
+// ST power
+line(C,[[3312,990],[3340,990]],"#1b9a4c",10);
+xfmr(C,3370,990,"",0);
+el("line",{x1:3370,y1:990,x2:3370,y2:990},C);
+line(C,[[3400,990],[3446,990]],"#1b9a4c",10,"aG");
+txt(C,3370,1080,"MBA",24,700,"#1b6b3a");
+badge(C,3620,180+0,7);
+
+// legend
+const L=[["#3aa0e8","Không khí"],["#c9a000","Nhiên liệu"],["#e07b1a","Khói thải nóng"],["#d1262b","Hơi nước"],["#1f5fbf","Nước ngưng / cấp"],["#17a2b8","Nước làm mát"],["#1b9a4c","Điện"]];
+document.getElementById("legend").innerHTML=L.map(([c,t])=>`<span style="display:inline-block;margin-right:26px;white-space:nowrap"><span style="display:inline-block;width:46px;height:12px;background:${c};border-radius:6px;vertical-align:middle;margin-right:10px"></span>${t}</span>`).join("");
+
+const STATIC=location.hash==="#static";
+document.querySelectorAll("[data-mw]").forEach(e=>{const v=+e.dataset.mw,isInt=e.dataset.int;const t0=performance.now();if(STATIC){e.textContent=(isInt?v.toLocaleString("vi-VN"):v.toFixed(1).replace(".",","))+" MW";return;}
+ function f(t){const k=Math.min(1,(t-t0)/2200),x=v*(1-Math.pow(1-k,3));e.textContent=(isInt?Math.round(x).toLocaleString("vi-VN"):x.toFixed(1).replace(".",","))+" MW";if(k<1)requestAnimationFrame(f);}
+ requestAnimationFrame(f);});
+function fit(){const sc=Math.min(innerWidth/3840,innerHeight/2160);document.body.style.transform=`translate(${(innerWidth-3840*sc)/2}px,${(innerHeight-2160*sc)/2}px) scale(${sc})`;}
+addEventListener("resize",fit);fit();
+</script>
+</body></html>

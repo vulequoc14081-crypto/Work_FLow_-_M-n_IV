@@ -20,7 +20,9 @@ body{transform-origin:0 0;position:relative}
 @keyframes flow{to{stroke-dashoffset:-36}}
 .flame{animation:flame .6s ease-in-out infinite alternate}
 @keyframes flame{from{fill:#ffd34d}to{fill:#ff9d2e}}
-.paused .flow,.paused .flame{animation-play-state:paused}
+.hot-zone{animation:hotPulse .85s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes hotPulse{from{opacity:.42;filter:url(#hotGlow)}to{opacity:.96;filter:url(#hotGlowStrong)}}
+.paused .flow,.paused .flame,.paused .hot-zone{animation-play-state:paused}
 .btn{position:absolute;right:900px;top:40px;font-size:36px;font-weight:700;color:#fff;background:#1b8a4c;border:2px solid rgba(255,255,255,.6);border-radius:18px;padding:16px 30px;cursor:pointer;font-family:inherit}
 .mw{font-weight:800}
 .foot{position:absolute;left:70px;top:2112px;font-size:26px;color:#5a6b85}
@@ -36,6 +38,7 @@ body{transform-origin:0 0;position:relative}
   <marker id="aBlue" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#3aa0e8"/></marker>
   <marker id="aOr" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#e07b1a"/></marker>
   <marker id="aRed" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#d1262b"/></marker>
+  <marker id="aRedS" markerWidth="26" markerHeight="26" refX="3" refY="13" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L26,13 L0,26 z" fill="#d1262b"/></marker>
   <marker id="aW" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#1f5fbf"/></marker>
   <marker id="aG" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#1b9a4c"/></marker>
   <marker id="aF" markerWidth="44" markerHeight="40" refX="30" refY="20" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L44,20 L0,40 z" fill="#c9a000"/></marker>
@@ -46,6 +49,8 @@ body{transform-origin:0 0;position:relative}
   <linearGradient id="gST" x1="0" x2="1"><stop offset="0" stop-color="#ef7b7e"/><stop offset="1" stop-color="#b9375b"/></linearGradient>
   <linearGradient id="gGen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd08a"/><stop offset="1" stop-color="#1b8a4c"/></linearGradient>
   <filter id="sh" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0a2a5a" flood-opacity=".18"/></filter>
+  <filter id="hotGlow" x="-40%" y="-30%" width="180%" height="160%"><feGaussianBlur stdDeviation="9" result="blur"/><feFlood flood-color="#ff3b19" flood-opacity=".78" result="color"/><feComposite in="color" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="hotGlowStrong" x="-40%" y="-30%" width="180%" height="160%"><feGaussianBlur stdDeviation="15" result="blur"/><feFlood flood-color="#ff210f" flood-opacity=".96" result="color"/><feComposite in="color" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
 <g id="trains"></g>
 <g id="common"></g>
@@ -124,17 +129,23 @@ function train(Yc,n,top){
   line(g,[[1432,Yc],[1530,Yc]],"#e07b1a",22,"aOr");
   // HRSG
   el("rect",{x:1550,y:Yc-200,width:600,height:400,rx:18,fill:"url(#gHrsg)",stroke:"#9b5a2a","stroke-width":5,filter:"url(#sh)"},g);
-  const bands=["QN/TN","CA","TA","HA","Hâm"];
-  bands.forEach((b,i)=>{const x=1585+i*112;el("rect",{x,y:Yc-150,width:70,height:300,rx:8,fill:"none",stroke:"#c0392b","stroke-width":4,"stroke-dasharray":"6 6"},g);txt(g,x+35,Yc+125,b,22,700,"#7a2a14");
-    for(let k=0;k<5;k++)el("line",{x1:x+10,y1:Yc-120+k*45,x2:x+60,y2:Yc-120+k*45,stroke:"#c0392b","stroke-width":3},g);});
+  // HRSG heat-transfer sections: internationally used English abbreviations.
+  const bands=["HP SH","HP EV","IP SH","LP EV","ECO"];
+  bands.forEach((b,i)=>{const x=1585+i*112;
+    el("rect",{x:x-5,y:Yc-156,width:80,height:312,rx:12,fill:"#ff3b19",opacity:".30",class:"hot-zone"},g);
+    el("rect",{x,y:Yc-150,width:70,height:300,rx:8,fill:"rgba(255,238,214,.50)",stroke:"#c0392b","stroke-width":4,"stroke-dasharray":"6 6"},g);txt(g,x+35,Yc+125,b,19,800,"#7a2a14");
+    for(let k=0;k<5;k++)el("line",{x1:x+10,y1:Yc-120+k*45,x2:x+60,y2:Yc-120+k*45,stroke:"#d92f1f","stroke-width":3},g);});
   txt(g,1850,top?Yc-245:Yc+245,"Lò thu hồi nhiệt HRSG #"+n+" (BHI)",34,800,"#7a3a10");
   line(g,[[1600,Yc-175],[2100,Yc-175]],"#e07b1a",6,"aOr","4 10");
   badge(g,1490,Yc-70,4);
   // stack
   const sTop=top?Yc-370:Yc-280;
-  el("rect",{x:2180,y:sTop,width:80,height:(Yc+200)-sTop,fill:"#8a96a8",stroke:"#5d6b7e","stroke-width":4},g);
+  const sH=(Yc+200)-sTop,nB=10,bH=sH/nB;
+  el("rect",{x:2180,y:sTop,width:80,height:sH,fill:"#ffffff"},g);
+  for(let k=0;k<nB;k+=2)el("rect",{x:2180,y:sTop+k*bH,width:80,height:bH,fill:"#d7262b"},g);
+  el("rect",{x:2180,y:sTop,width:80,height:sH,fill:"none",stroke:"#7a1418","stroke-width":4},g);
   el("rect",{x:2150,y:Yc+60,width:32,height:80,fill:"#c4ccd6"},g);
-  line(g,[[2220,sTop-6],[2220,sTop-70]],"#9aa5b5",12,null,"2 14");
+  if(top)line(g,[[2220,sTop-6],[2220,sTop-70]],"#9aa5b5",12,null,"2 14");
   txt(g,2280,top?sTop+24:Yc+170,"Ống khói",30,700,"#4a5668","start");
   // fuel tap
   return g;
@@ -150,34 +161,50 @@ line(C,[[1065,1032],[1065,Y2-90]],"#c9a000",12,"aF");
 badge(C,960,Y1+120,2);badge(C,1290,Y1-205,3);
 
 // feedwater
-line(C,[[2400,1195],[2400,1040],[2080,1040]],"#1f5fbf",12);
-line(C,[[2080,1040],[2080,Y1+210]],"#1f5fbf",12,"aW");
-line(C,[[2080,1040],[2080,Y2-210]],"#1f5fbf",12,"aW");
-// steam header (red) and feedwater (blue)
-line(C,[[1700,Y1+202],[1700,960],[2440,960]],"#d1262b",18,"aRed");
-line(C,[[1700,Y2-202],[1700,960]],"#d1262b",18);
-txt(C,1960,925,"Hơi từ 2 HRSG",30,800,"#a3151a");
-txt(C,2110,1075,"Nước cấp về HRSG",28,700,"#1f5fbf","start");
+line(C,[[2400,1195],[2400,990],[2080,990]],"#1f5fbf",12);
+// Feedwater to HRSG #1 jumps over the main-steam header (P&ID line-hop), no overlap.
+el("path",{d:`M2080,990 L2080,884 A22,22 0 0 1 2080,840 L2080,${Y1+210}`,fill:"none",stroke:"#1f5fbf","stroke-width":12,"stroke-linecap":"round","marker-end":"url(#aW)"},C);
+line(C,[[2080,990],[2080,Y2-210]],"#1f5fbf",12,"aW");
+// Steam header is deliberately routed above the turbine train: no overlap with shaft, crossover or exhaust lines.
+// Main-steam admission is at the centre between HP and IP; LP admission is at the centre of its two flows.
+line(C,[[1700,Y1+202],[1700,862],[2608,862],[2608,893]],"#d1262b",16,"aRedS");
+line(C,[[1700,Y2-202],[1700,862]],"#d1262b",16);
+txt(C,1725,905,"Hơi chính từ 2 HRSG",30,800,"#a3151a","start");
+txt(C,2110,1035,"Nước cấp về HRSG",28,700,"#1f5fbf","start");
 
-// steam turbine
-el("polygon",{points:"2450,925 2620,905 2620,1075 2450,1055",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
-el("polygon",{points:"2630,895 2780,880 2780,1100 2630,1085",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
-el("polygon",{points:"2790,870 3000,830 3000,1150 2790,1110",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
-txt(C,2535,990,"CA",30,800,"#fff");txt(C,2705,990,"TA",30,800,"#fff");txt(C,2895,990,"HA",30,800,"#fff");
-txt(C,2725,780,"Tuabin hơi SST-5000 · Siemens Energy",34,800,"#8a1f3d");
-el("rect",{x:3000,y:976,width:60,height:28,fill:"#5d6b7e"},C);
-el("rect",{x:3060,y:870,width:252,height:240,rx:40,fill:"url(#gGen)",filter:"url(#sh)"},C);
-txt(C,3186,915,"Máy phát ST",30,800,"#fff");txt(C,3186,955,"Siemens Energy",23,600,"#eafff1");txt(C,3186,988,"STG-3000W",23,600,"#eafff1");
-const mst=txt(C,3186,1048,"0,0 MW",38,800,"#fff");mst.setAttribute("data-mw","377.2");
-badge(C,2490,850,5);
+// Back-pressure steam turbine: admission between HP–IP, then crossover to the centre of twin-flow LP.
+// The converging/diverging casings make the flow direction explicit, rather than showing four serial blocks.
+el("polygon",{points:"2450,915 2600,925 2600,1055 2450,1065",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+el("polygon",{points:"2615,925 2765,900 2765,1080 2615,1055",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+// Dedicated upper crossover: IP outlet → centre steam chest of the twin-flow LP.
+// It uses a separate elevation from the main-steam header and therefore never crosses another steam line.
+line(C,[[2740,903],[2740,765],[2940,765],[2940,876]],"#d1262b",14,"aRedS");
+// Twin-flow LP casing: steam enters at the centre and expands in opposite directions.
+el("polygon",{points:"2800,875 2940,905 2940,1075 2800,1120",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+el("polygon",{points:"2940,905 3080,875 3080,1120 2940,1075",fill:"url(#gST)",stroke:"#8a1f3d","stroke-width":4,filter:"url(#sh)"},C);
+// Shaft and centre steam-chest make the two LP flows read as one double-flow LP module.
+el("line",{x1:2440,y1:990,x2:3120,y2:990,stroke:"#5d6b7e","stroke-width":16,"stroke-linecap":"round"},C);
+el("circle",{cx:2940,cy:990,r:34,fill:"#fff3f3",stroke:"#d1262b","stroke-width":7},C);
+txt(C,2525,990,"HP",29,800,"#fff");txt(C,2690,990,"IP",29,800,"#fff");txt(C,2860,990,"LP1",26,800,"#fff");txt(C,3020,990,"LP2",26,800,"#fff");
+txt(C,2760,680,"Tuabin hơi đối áp SST-5000 · Siemens Energy",34,800,"#8a1f3d");
+txt(C,2590,835,"Vào giữa HP–IP",22,800,"#a3151a","end");
+txt(C,2940,730,"Crossover IP → tâm LP",22,800,"#a3151a");
+el("rect",{x:3060,y:976,width:60,height:28,fill:"#5d6b7e"},C);
+el("rect",{x:3120,y:870,width:220,height:240,rx:40,fill:"url(#gGen)",filter:"url(#sh)"},C);
+txt(C,3230,915,"Máy phát ST",30,800,"#fff");txt(C,3230,955,"Siemens Energy",23,600,"#eafff1");txt(C,3230,988,"STG-3000W",23,600,"#eafff1");
+const mst=txt(C,3230,1048,"0,0 MW",38,800,"#fff");mst.setAttribute("data-mw","377.2");
+badge(C,2525,1115,5);
 
-// condenser
-line(C,[[2895,1152],[2895,1190]],"#d1262b",14,"aRed");
-el("rect",{x:2700,y:1200,width:340,height:150,rx:24,fill:"#d9ecff",stroke:"#1f5fbf","stroke-width":5,filter:"url(#sh)"},C);
-txt(C,2870,1255,"Bình ngưng",34,800,"#0b3f8a");txt(C,2870,1300,"hơi → nước",26,600,"#0b3f8a");
+// Two clearly separated LP exhausts: left and right ends → common condenser inlet.
+line(C,[[2800,1122],[2800,1155],[2910,1155],[2910,1172]],"#d1262b",14,"aRedS");
+line(C,[[3080,1122],[3080,1155],[2910,1155]],"#d1262b",14);
+txt(C,2772,1145,"Xả LP1",20,800,"#a3151a","end");
+txt(C,3108,1145,"Xả LP2",20,800,"#a3151a","start");
+el("rect",{x:2700,y:1200,width:420,height:150,rx:24,fill:"#d9ecff",stroke:"#1f5fbf","stroke-width":5,filter:"url(#sh)"},C);
+txt(C,2910,1255,"Bình ngưng",34,800,"#0b3f8a");txt(C,2910,1300,"hơi → nước",26,600,"#0b3f8a");
 // cooling water
-line(C,[[3330,1250],[3060,1250]],"#17a2b8",12,"aC");
-line(C,[[3045,1310],[3330,1310]],"#17a2b8",12,"aC");
+line(C,[[3330,1250],[3140,1250]],"#17a2b8",12,"aC");
+line(C,[[3125,1310],[3330,1310]],"#17a2b8",12,"aC");
 txt(C,3200,1205,"Nước làm mát vào",26,700,"#0f7585");txt(C,3200,1362,"Nước làm mát ra",26,700,"#0f7585");
 // pump
 line(C,[[2698,1275],[2445,1275]],"#1f5fbf",12,"aW");
@@ -201,11 +228,11 @@ line(C,[[465,Y2+120],[465,Y2+150]],"#1b9a4c",10);
 xfmr(C,465,Y2+205,"MBA tăng áp",0,"end",410);
 line(C,[[465,Y2+260],[465,1660],[3620,1660],[3620,1644]],"#1b9a4c",10,"aG");
 // ST power
-line(C,[[3312,990],[3340,990]],"#1b9a4c",10);
-xfmr(C,3370,990,"",0);
-el("line",{x1:3370,y1:990,x2:3370,y2:990},C);
-line(C,[[3400,990],[3446,990]],"#1b9a4c",10,"aG");
-txt(C,3370,1080,"MBA",24,700,"#1b6b3a");
+line(C,[[3340,990],[3360,990]],"#1b9a4c",10);
+xfmr(C,3390,990,"",0);
+el("line",{x1:3390,y1:990,x2:3390,y2:990},C);
+line(C,[[3420,990],[3446,990]],"#1b9a4c",10,"aG");
+txt(C,3390,1080,"MBA",24,700,"#1b6b3a");
 badge(C,3620,180+0,7);
 
 // legend
